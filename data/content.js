@@ -378,7 +378,13 @@ window.SITE_DATA={
   "columns": [
    {
     "title": "The Somaliland Age",
+    "nameFont": "same as site name",
+    "nameSize": 30,
     "text": "Independent news, broadcasting & analysis.",
+    "email": "info@somalilandage.co.uk",
+    "phone": "",
+    "address": "",
+    "contact": "",
     "links": []
    },
    {
@@ -443,7 +449,7 @@ window.SITE_DATA={
    }
   ],
   "copyright": "© 2026 The Somaliland Age. All rights reserved.",
-  "note": "Build v1"
+  "note": ""
  },
  "pages": [
   {
@@ -519,8 +525,8 @@ window.SITE_DATA={
    }
   ]
  },
- "rev": 1793586122919,
- "v": 4,
+ "rev": 1793681672069,
+ "v": 5,
  "fontsV": 3,
  "tagV": 1
 };
