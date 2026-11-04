@@ -1,6 +1,6 @@
 /* The Somaliland Age - site renderer, routing, login, instant saving. The dashboard lives in admin.js (loaded only after login). Code version 2.0.2 */
 (()=>{
-const CODE_VERSION='2.0.6';
+const CODE_VERSION='2.0.8';
 const E=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const slug=s=>String(s||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
 
@@ -89,10 +89,10 @@ function sha256(s){s=unescape(encodeURIComponent(s));
   for(i=0;i<8;i++)hash[i]=(hash[i]+old[i])|0}
  for(i=0;i<8;i++)for(j=3;j+1;j--){const b=(hash[i]>>(j*8))&255;res+=(b<16?0:'')+b.toString(16)}
  return res}
-const LA='somaliland-local-auth',rs=()=>Math.random().toString(36).slice(2)+Date.now();
+const LA='somalilandage-local-auth',rs=()=>Math.random().toString(36).slice(2)+Date.now();
 function localAuth(){let a=null;try{a=JSON.parse(localStorage.getItem(LA)||'null')}catch(e){}
  if(!a){const salt=rs();a={user:'admin',salt,hash:sha256(salt+'admin123'),isDefault:true};localStorage.setItem(LA,JSON.stringify(a))}return a}
-const idb=()=>new Promise((ok,no)=>{const r=indexedDB.open('somaliland-local',1);r.onupgradeneeded=()=>r.result.createObjectStore('k');r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)});
+const idb=()=>new Promise((ok,no)=>{const r=indexedDB.open('somalilandage-local',1);r.onupgradeneeded=()=>r.result.createObjectStore('k');r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)});
 async function ldbGet(){try{localStorage.removeItem('ama-draft');const d=await idb();return await new Promise(ok=>{const q=d.transaction('k').objectStore('k').get('draft');q.onsuccess=()=>ok(q.result||null);q.onerror=()=>ok(null)})}catch(e){try{return JSON.parse(localStorage.getItem('ama-draft')||'null')}catch(e2){return null}}}
 async function ldbSet(v){try{const d=await idb();await new Promise((ok,no)=>{const t=d.transaction('k','readwrite');t.objectStore('k').put(v,'draft');t.oncomplete=ok;t.onerror=()=>no(t.error)});return true}catch(e){try{localStorage.setItem('ama-draft',JSON.stringify(v));return true}catch(e2){return false}}}
 /* ---- save straight into the site folder (Chrome / Edge): no extra program needed ---- */
@@ -104,7 +104,7 @@ const FS={h:null,ok:false,bk:false,supported:()=>!!window.showDirectoryPicker,
  async has(d,n){try{await d.getFileHandle(n);return true}catch(e){return false}},
  async site(h){const ok=async d=>d&&await FS.has(d,'index.html')&&await FS.sub(d,'data')&&await FS.has(await FS.sub(d,'data'),'content.js');
   if(await ok(h))return h;for(const n of ['public','the-somaliland-age']){const s=await FS.sub(h,n);if(await ok(s))return s}return null},
- async connect(){let h;try{h=await window.showDirectoryPicker({id:'somaliland-site',mode:'readwrite'})}catch(e){return {cancel:1}}
+ async connect(){let h;try{h=await window.showDirectoryPicker({id:'somalilandage-site',mode:'readwrite'})}catch(e){return {cancel:1}}
   const r=await FS.site(h);if(!r)return {error:'That is not the website folder. Choose the folder that contains index.html and the "data" folder (it is called "public" in the GitHub version).'};FS.h=r;await FS.keep(r);FS.ok=true;return {ok:true}},
  async write(rel,data){const p=rel.split('/'),name=p.pop();let d=FS.h;for(const x of p)d=await d.getDirectoryHandle(x,{create:true});const f=await d.getFileHandle(name,{create:true}),w=await f.createWritable();await w.write(data);await w.close()},
  async text(rel){try{const p=rel.split('/'),name=p.pop();let d=FS.h;for(const x of p)d=await d.getDirectoryHandle(x);return await (await (await d.getFileHandle(name)).getFile()).text()}catch(e){return null}}};
@@ -353,7 +353,7 @@ const SOC={tiktok:{n:'TikTok',h:'https://www.tiktok.com',i:'<path d="M12.525.02c
  facebook:{n:'Facebook',h:'https://www.facebook.com',i:'<path transform="translate(12 12) scale(1.22) translate(-12.25 -12.6)" d="M13.6 22v-8.6h2.9l.5-3.4h-3.4V7.8c0-1 .4-1.7 1.8-1.7H17V3.2c-.3 0-1.3-.2-2.5-.2-2.6 0-4.2 1.5-4.2 4.3V10H7.5v3.4h2.8V22z"/>'},
  x:{n:'X',h:'https://x.com',i:'<path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/>'},
  instagram:{n:'Instagram',h:'https://www.instagram.com',i:'<rect x="4.5" y="4.5" width="15" height="15" rx="4.4" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3.5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="16.6" cy="7.4" r="1.05"/>'}};
-function socHTML(S){if(S.showSocial===false)return '';return (S.social||[]).map(x=>{const k=String(x.network||'').toLowerCase().replace(/[^a-z]/g,''),o=SOC[k];if(!o)return '';const u=/^(https?:|mailto:|tel:|\/|#)/i.test((x.url||'').trim())?x.url.trim():o.h;return `<a href="${E(u)}" target="_blank" rel="noopener" aria-label="${o.n}" title="${o.n}"><img src="images/${k}.png" alt="" width="64" height="64" draggable="false"></a>`}).join('')}
+function socHTML(S){if(S.showSocial===false)return '';return (S.social||[]).map(x=>{const k=String(x.network||'').toLowerCase().replace(/[^a-z]/g,''),o=SOC[k];if(!o)return '';const u=/^(https?:|mailto:|tel:|\/|#)/i.test((x.url||'').trim())?x.url.trim():o.h;return `<a class="si-${k}" href="${E(u)}" target="_blank" rel="noopener" aria-label="${o.n}" title="${o.n}"><img src="images/${k}.png?v=${CODE_VERSION}" alt="" width="64" height="64" draggable="false"></a>`}).join('')}
 /* ---- render ---- */
 function render(){if(!D)return;
  const S=D.site,Fo=D.footer,R=document.documentElement.style;
