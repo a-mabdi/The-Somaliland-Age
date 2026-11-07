@@ -4,7 +4,7 @@
 .top{background:#0b1a33;color:#cdd6e5;font-size:12px;padding:8px 5%;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}.top a{margin-left:16px}
 #hd img{display:block;width:100%;height:auto}
 nav{background:var(--m);position:sticky;top:0;z-index:20;padding:0 5%}.nl{display:flex;flex-wrap:wrap}.hb{display:none;background:none;border:0;color:#fff;font:700 16px var(--f);padding:14px 0;cursor:pointer;width:100%;text-align:left}nav a{color:#fff;padding:14px 16px;white-space:nowrap;font-weight:600}nav a:hover{background:#ffffff26}
-.tick{background:var(--a);color:#fff;overflow:hidden;white-space:nowrap;display:flex}.tick b{padding:10px 16px;background:#0003;position:relative;z-index:2;flex:none;font-size:13px}.tw{flex:1;overflow:hidden;min-width:0}.tr{display:inline-block;white-space:nowrap;padding:10px 0;animation:m 45s linear infinite}.tick:hover .tr{animation-play-state:paused}@keyframes m{to{transform:translateX(-50%)}}.tr i{font-style:normal;font-weight:700;font-size:11px;background:#fff3;padding:2px 8px;margin:0 8px 0 40px;border-radius:3px}
+.tick{background:var(--a);color:#fff;overflow:hidden;white-space:nowrap;display:flex}.tick b{padding:10px 16px;background:#0003;position:relative;z-index:2;flex:none;font-size:13px}.tw{flex:1;overflow:hidden;min-width:0}.tr{display:inline-block;white-space:nowrap;padding:10px 0;animation:m 70s linear infinite}.tick:hover .tr{animation-play-state:paused}@keyframes m{to{transform:translateX(-50%)}}.tr i{font-style:normal;font-weight:700;font-size:11px;background:#fff3;padding:2px 8px;margin:0 8px 0 40px;border-radius:3px}
 .g{display:grid;grid-template-columns:240px 1fr 300px;gap:24px;max-width:1280px;margin:24px auto;padding:0 20px;align-items:start}
 .pn{background:#fff;border-radius:12px;padding:20px;border:1px solid #e3e7ee}.pn h3{margin:0 0 6px;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:#46506a;border-bottom:2px solid var(--m);padding-bottom:10px}
 .al{max-height:720px;overflow:auto}.it{display:block;padding:11px 0;border-bottom:1px solid #e6e9ef}.it:last-child{border:0}
@@ -183,7 +183,6 @@ body.editing #hd .ht1:hover,body.editing #hd .ht2:hover{outline:2px solid #1769e
 /* social icons are now picture files (images/tiktok.png ...): white, transparent, ring included */
 .soc a,nav .soc a{border:0!important;border-radius:50%}
 .soc a img{width:100%;height:100%;display:block;object-fit:contain;pointer-events:none}
-.hwrap.mast .soc a img{filter:invert(1)}
 /* ===== v2.0: shorter top, social icons, edge-to-edge phones, compact phone footer ===== */
 /* desktop: slim top strip, shorter header band (the picture is cropped, never stretched), slimmer menu and ticker */
 .top{padding:2px 5%;line-height:1.2}.top input{height:22px;padding:1px 11px}
@@ -272,7 +271,7 @@ body.pvframe .lg,body.pvframe .lg2,body.pvframe #sv{display:none!important}
 @media(max-width:700px){.pvt{padding:6px 8px}.pvt button{padding:7px 9px;font-size:12px}.pvt .pvi{display:none}}
 html.pvframe,html.pvframe body{scrollbar-width:none;-ms-overflow-style:none}html.pvframe::-webkit-scrollbar,body.pvframe::-webkit-scrollbar{display:none;width:0;height:0}
 
-/* ===== v2.0.6: fixed top on phones/tablets, footer name + contact ===== */
+/* ===== v2.0.8: fixed top on phones/tablets, footer name + contact ===== */
 .stk{display:contents}
 @media(max-width:1024px){
  .stk{display:block;position:sticky;top:0;z-index:40}
@@ -286,3 +285,15 @@ html.pvframe,html.pvframe body{scrollbar-width:none;-ms-overflow-style:none}html
 @media(max-width:700px){.ft h4.fname{font-size:min(var(--ns,30px),28px);margin:0 0 4px}.fct{font-size:14px;margin:4px 0}}
 .fct .cl{display:inline-block;min-width:60px;color:var(--fm);font-size:.9em}
 .fct.fph{border:1px dashed #ffffff66;border-radius:6px;padding:8px 10px;color:var(--fm);cursor:pointer}.fct.fph:hover{background:#ffffff14}
+
+/* v2.0.8: colour-coded icons with a transparent background; the black ones (TikTok, X) get a hairline white glow so they show on the dark blue bar */
+.soc a,nav .soc a{background:transparent!important;transition:transform .15s}
+.soc a:hover,nav .soc a:hover{background:transparent!important;transform:scale(1.12)}
+.soc a.si-tiktok img,.soc a.si-x img{filter:drop-shadow(0 0 .6px #fff) drop-shadow(0 0 .6px #fff)}
+
+/* ===== v2.0.9 phones: a little more breathing room around the slideshow and at the sides ===== */
+@media(max-width:700px){
+ .g,.below{padding:0 6px}
+ .g{margin:14px auto 8px}
+ .sl{margin-bottom:8px}
+}
